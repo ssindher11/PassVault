@@ -1,3 +1,3 @@
-# pass_vault
+# PassVault
 
 Your passwords, secured.
