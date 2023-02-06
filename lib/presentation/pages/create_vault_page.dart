@@ -170,6 +170,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
             ),
             style: const TextStyle(color: darkTextColor),
             cursorColor: darkTextColor,
+            textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 12),
           const Text(
@@ -203,6 +204,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
             ),
             style: const TextStyle(color: darkTextColor),
             cursorColor: darkTextColor,
+            textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 12),
           const Text(
@@ -283,6 +285,75 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
     );
   }
 
+  Widget _buildAddTagsSection() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(20, 18, 20, 0),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'Add Tag',
+            style: TextStyle(
+              color: darkTextColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // TODO: Change chip logic
+          Wrap(
+            spacing: 6,
+            children: [
+              ChoiceChip(
+                label: Text(
+                  'Design',
+                  style: TextStyle(
+                    color: isChipSelected ? Colors.white : redPrimary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+                backgroundColor: lightOrange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                selected: isChipSelected,
+                onSelected: (isSelected) => setState(() {
+                  isChipSelected = isSelected;
+                }),
+                selectedColor: redPrimary,
+              ),
+              ActionChip(
+                label: const Text(
+                  'Add +',
+                  style: TextStyle(
+                    color: Color(0xFF47495B),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+                backgroundColor: lightBg,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  var isChipSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -335,6 +406,9 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                       SliverToBoxAdapter(
                         child: _buildCredentialSection(),
                       ),
+                      SliverToBoxAdapter(
+                        child: _buildAddTagsSection(),
+                      ),
                       SliverPadding(
                         padding: const EdgeInsets.only(top: 24, bottom: 32),
                         sliver: SliverToBoxAdapter(
@@ -347,8 +421,10 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                                 backgroundColor:
                                     MaterialStateProperty.all(redPrimary),
                                 shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30))),
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
                               ),
                               child: const Padding(
                                 padding: EdgeInsets.all(16),
