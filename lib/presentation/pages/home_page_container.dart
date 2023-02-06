@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pass_vault/presentation/views/category_row.dart';
+import 'package:pass_vault/presentation/views/vault_list_item.dart';
 import 'package:pass_vault/res/color.dart';
 
 import 'create_vault_page.dart';
@@ -69,6 +71,41 @@ class HomePageContainer extends StatelessWidget {
     );
   }
 
+  Widget _buildVaultList(BuildContext context) {
+    // TODO: Implement actual list
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        extentRatio: 0.35,
+        children: [
+          CustomSlidableAction(
+            onPressed: null,
+            backgroundColor: lightBg,
+            foregroundColor: lightBg,
+            autoClose: false,
+            child: FloatingActionButton.small(
+              onPressed: () {},
+              backgroundColor: darkBlue,
+              child: const Icon(Icons.edit_outlined),
+            ),
+          ),
+          CustomSlidableAction(
+            onPressed: null,
+            backgroundColor: lightBg,
+            foregroundColor: lightBg,
+            autoClose: false,
+            child: FloatingActionButton.small(
+              onPressed: () {},
+              backgroundColor: redPrimary,
+              child: const Icon(Icons.delete_outline),
+            ),
+          ),
+        ],
+      ),
+      child: VaultListItem(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,6 +134,12 @@ class HomePageContainer extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
             sliver: SliverToBoxAdapter(
               child: _buildRecentlyUsedRow(context),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 16, bottom: 24),
+            sliver: SliverToBoxAdapter(
+              child: _buildVaultList(context),
             ),
           ),
         ],
