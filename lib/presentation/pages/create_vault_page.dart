@@ -305,58 +305,64 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                   height: MediaQuery.of(context).viewPadding.top,
                 ),
                 _buildAppBar(context),
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 20),
-                      Obx(
-                        () => _siteAddress.isNotEmpty
-                            ? Align(
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                  ),
-                                  height: 64,
-                                  width: 64,
-                                  padding: const EdgeInsets.all(12),
-                                  child: Image.network(
-                                    getFaviconUseCase
-                                        .execute(_siteAddress.value),
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: const EdgeInsets.only(top: 20),
+                        sliver: SliverToBoxAdapter(
+                          child: Obx(
+                            () => _siteAddress.isNotEmpty
+                                ? Align(
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                      ),
+                                      height: 64,
+                                      width: 64,
+                                      padding: const EdgeInsets.all(12),
+                                      child: Image.network(
+                                        getFaviconUseCase
+                                            .execute(_siteAddress.value),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: _buildCredentialSection(),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.only(top: 24, bottom: 32),
+                        sliver: SliverToBoxAdapter(
+                          child: Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(redPrimary),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30))),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Text(
+                                  'Create the vault',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                              )
-                            : Container(),
-                      ),
-                      _buildCredentialSection(),
-
-                      // Bottom section
-                      const SizedBox(height: 24),
-                      Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(redPrimary),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Text(
-                              'Create the vault',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
                     ],
                   ),
                 ),
