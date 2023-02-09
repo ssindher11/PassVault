@@ -85,7 +85,7 @@ class _$VaultDatabase extends VaultDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `vault` (`id` INTEGER, `category` TEXT NOT NULL, `username` TEXT NOT NULL, `site_address` TEXT NOT NULL, `password_hash` TEXT NOT NULL, `is_favourite` INTEGER NOT NULL, `updated_at` INTEGER, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `vault` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `category` TEXT NOT NULL, `username` TEXT NOT NULL, `site_address` TEXT NOT NULL, `password_hash` TEXT NOT NULL, `is_favourite` INTEGER NOT NULL, `updated_at` INTEGER)');
 
         await callback?.onCreate?.call(database, version);
       },

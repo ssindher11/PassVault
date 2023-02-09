@@ -4,7 +4,14 @@ import 'package:pass_vault/res/color.dart';
 import 'package:pass_vault/res/images.dart';
 
 class CategoryRow extends StatelessWidget {
-  const CategoryRow({Key? key}) : super(key: key);
+  const CategoryRow({
+    required this.categoryCount,
+    required this.onCategoryClick,
+    Key? key,
+  }) : super(key: key);
+
+  final Map<String, int> categoryCount;
+  final Function(String category) onCategoryClick;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +23,8 @@ class CategoryRow extends StatelessWidget {
           child: CategoryCard(
             categoryName: 'Browser',
             iconPath: categoryBrowser,
-            numPasswords: 18,
-            onTap: () {},
+            numPasswords: categoryCount['Browser'] ?? 0,
+            onTap: () => onCategoryClick('Browser'),
           ),
         ),
         const SizedBox(width: 12),
@@ -26,8 +33,8 @@ class CategoryRow extends StatelessWidget {
           child: CategoryCard(
             categoryName: 'Mobile app',
             iconPath: categoryMobile,
-            numPasswords: 12,
-            onTap: () {},
+            numPasswords: categoryCount['Mobile app'] ?? 0,
+            onTap: () => onCategoryClick('Mobile app'),
           ),
         ),
         const SizedBox(width: 12),
@@ -36,8 +43,8 @@ class CategoryRow extends StatelessWidget {
           child: CategoryCard(
             categoryName: 'Payment',
             iconPath: categoryPayment,
-            numPasswords: 6,
-            onTap: () {},
+            numPasswords: categoryCount['Payment'] ?? 0,
+            onTap: () => onCategoryClick('BrowserPayment'),
           ),
         ),
       ],

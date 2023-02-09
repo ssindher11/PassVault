@@ -22,6 +22,8 @@ dependencies:
   flutter_slidable: ^2.0.0
   floor: ^1.4.1
   dartz: ^0.10.1
+  rxdart: ^0.27.7
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +45,7 @@ flutter:
     - assets/images/category_mobile.svg
     - assets/images/category_payment.svg
     - assets/images/light_backdrop.png
+    - assets/images/add_files.svg
 
 
   # To add custom fonts to your application, add a fonts section here,
