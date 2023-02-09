@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pass_vault/domain/entities/vault_model.dart';
+import 'package:pass_vault/injection.dart';
+import 'package:pass_vault/presentation/bloc/create_vault_bloc.dart';
 import 'package:pass_vault/res/images.dart';
 
 import '../../domain/usecases/get_favicon_use_case.dart';
@@ -15,11 +18,19 @@ class CreateVaultPage extends StatefulWidget {
 
 class _CreateVaultPageState extends State<CreateVaultPage> {
   final IGetFaviconUseCase getFaviconUseCase = GetFaviconUseCase();
+  final CreateVaultBloc _createVaultBloc = locator<CreateVaultBloc>();
+
   final _siteAddress = ''.obs;
   final _siteAddressController = TextEditingController();
   final _siteAddressDebouncer = Debouncer(milliseconds: 500);
 
-  final _categoriesList = ["Browser", "Mobile App", "Payment"];
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  String? usernameError;
+  String? siteAddressError;
+  String? passwordError;
+
+  final _categoriesList = ["Browser", "Mobile app", "Payment"];
   String? _selectedCategory = "Browser";
 
   final _obscureText = true.obs;
@@ -41,6 +52,8 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
   @override
   void dispose() {
     _siteAddressController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     _siteAddressDebouncer.dispose();
     super.dispose();
   }
@@ -148,26 +161,27 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
           const SizedBox(height: 4),
           TextField(
             controller: _siteAddressController,
+            onChanged: (_) => setState(() { siteAddressError = null; }),
             maxLines: 1,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
-              hintText: 'snapchat.com',
-              hintStyle: const TextStyle(color: greyTextColor),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: greyBorderColor),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: redPrimary),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              prefixIcon: const Icon(Icons.link),
-              filled: true,
-              fillColor: Colors.white,
-            ),
+                contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+                hintText: 'snapchat.com',
+                hintStyle: const TextStyle(color: greyTextColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: greyBorderColor),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: redPrimary),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: const Icon(Icons.link),
+                filled: true,
+                fillColor: Colors.white,
+                errorText: siteAddressError),
             style: const TextStyle(color: darkTextColor),
             cursorColor: darkTextColor,
             textInputAction: TextInputAction.next,
@@ -182,26 +196,28 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
           ),
           const SizedBox(height: 4),
           TextField(
+            controller: _usernameController,
+            onChanged: (_) => setState(() { usernameError = null; }),
             maxLines: 1,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
-              hintText: '@john.doe',
-              hintStyle: const TextStyle(color: greyTextColor),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: greyBorderColor),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: redPrimary),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              prefixIcon: const Icon(Icons.person_2_outlined),
-              filled: true,
-              fillColor: Colors.white,
-            ),
+                contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+                hintText: '@john.doe',
+                hintStyle: const TextStyle(color: greyTextColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: greyBorderColor),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: redPrimary),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: const Icon(Icons.person_2_outlined),
+                filled: true,
+                fillColor: Colors.white,
+                errorText: usernameError),
             style: const TextStyle(color: darkTextColor),
             cursorColor: darkTextColor,
             textInputAction: TextInputAction.next,
@@ -220,6 +236,8 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
               Expanded(
                 child: Obx(
                   () => TextField(
+                    controller: _passwordController,
+                    onChanged: (_) => setState(() { passwordError = null; }),
                     maxLines: 1,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
@@ -239,6 +257,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                       prefixIcon: const Icon(Icons.lock_outline),
                       filled: true,
                       fillColor: Colors.white,
+                      errorText: passwordError,
                       suffix: InkWell(
                         onTap: () {
                           _obscureText.value = !_obscureText.value;
@@ -285,7 +304,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
     );
   }
 
-  Widget _buildAddTagsSection() {
+  /*Widget _buildAddTagsSection() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -350,6 +369,27 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
         ],
       ),
     );
+  }*/
+
+  void _createVault() {
+    String username = _usernameController.text;
+    String siteAddress = _siteAddressController.text;
+    String password = _passwordController.text;
+    if (username.isNotEmpty && siteAddress.isNotEmpty && password.isNotEmpty) {
+      VaultModel vaultModel = VaultModel(
+        category: _selectedCategory ?? 'Browser',
+        username: _usernameController.text,
+        siteAddress: _siteAddressController.text,
+        passwordHash: _passwordController.text,
+        isFavourite: false,
+      );
+      _createVaultBloc.createVault(vaultModel);
+    } else {
+      usernameError = username.isEmpty ? 'Enter username' : null;
+      siteAddressError = siteAddress.isEmpty ? 'Enter website/app name' : null;
+      passwordError = password.isEmpty ? 'Enter password' : null;
+      setState(() {});
+    }
   }
 
   var isChipSelected = false;
@@ -406,9 +446,9 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                       SliverToBoxAdapter(
                         child: _buildCredentialSection(),
                       ),
-                      SliverToBoxAdapter(
+                      /*SliverToBoxAdapter(
                         child: _buildAddTagsSection(),
-                      ),
+                      ),*/
                       SliverPadding(
                         padding: const EdgeInsets.only(top: 24, bottom: 32),
                         sliver: SliverToBoxAdapter(
@@ -416,7 +456,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                             width: double.infinity,
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: _createVault,
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all(redPrimary),

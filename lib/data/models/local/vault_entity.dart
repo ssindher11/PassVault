@@ -2,7 +2,7 @@ import 'package:floor/floor.dart';
 
 @Entity(tableName: 'vault')
 class Vault {
-  @primaryKey
+  @PrimaryKey(autoGenerate: true)
   final int? id;
   final String category;
   final String username;
