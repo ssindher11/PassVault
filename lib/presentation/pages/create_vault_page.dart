@@ -383,7 +383,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
         passwordHash: _passwordController.text,
         isFavourite: false,
       );
-      _createVaultBloc.createVault(vaultModel);
+      _createVaultBloc.createVault(vaultModel).then((_) => Navigator.pop(context));
     } else {
       usernameError = username.isEmpty ? 'Enter username' : null;
       siteAddressError = siteAddress.isEmpty ? 'Enter website/app name' : null;
