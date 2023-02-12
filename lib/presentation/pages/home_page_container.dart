@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pass_vault/domain/entities/vault_model.dart';
 import 'package:pass_vault/injection.dart';
 import 'package:pass_vault/presentation/bloc/vault_bloc.dart';
+import 'package:pass_vault/presentation/pages/all_vaults_page.dart';
 import 'package:pass_vault/presentation/views/category_row.dart';
 import 'package:pass_vault/presentation/views/vault_list_item.dart';
 import 'package:pass_vault/res/color.dart';
 import 'package:pass_vault/res/images.dart';
 
-import 'create_vault_page.dart';
+import 'package:pass_vault/external/flutter_slidable/flutter_slidable.dart';
 
 class HomePageContainer extends StatefulWidget {
   const HomePageContainer({Key? key}) : super(key: key);
@@ -100,7 +100,7 @@ class _HomePageContainerState extends State<HomePageContainer> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CreateVaultPage()),
+              MaterialPageRoute(builder: (context) => const AllVaultsPage()),
             );
           },
           child: const Text(
@@ -116,19 +116,25 @@ class _HomePageContainerState extends State<HomePageContainer> {
     );
   }
 
-  Widget _buildVaultListItem(BuildContext context, VaultModel vaultModel) {
+  Widget _buildVaultListItem(BuildContext ctx, VaultModel vaultModel) {
+    final slidableKey = GlobalKey<SlidableState>();
+
     return Slidable(
+      key: slidableKey,
+      groupTag: '0',
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         extentRatio: 0.35,
         children: [
           CustomSlidableAction(
-            onPressed: null,
+            onPressed: (c) {},
             backgroundColor: lightBg,
             foregroundColor: lightBg,
-            autoClose: false,
+            autoClose: true,
             child: FloatingActionButton.small(
-              onPressed: () {},
+              onPressed: () {
+                slidableKey.currentState?.controller.close();
+              },
               backgroundColor: darkBlue,
               child: const Icon(Icons.edit_outlined),
             ),
@@ -139,7 +145,10 @@ class _HomePageContainerState extends State<HomePageContainer> {
             foregroundColor: lightBg,
             autoClose: false,
             child: FloatingActionButton.small(
-              onPressed: () => _vaultBloc.deleteVault(vaultModel),
+              onPressed: () {
+                slidableKey.currentState?.controller.close();
+                _vaultBloc.deleteVault(vaultModel);
+              },
               backgroundColor: redPrimary,
               child: const Icon(Icons.delete_outline),
             ),
@@ -203,14 +212,16 @@ class _HomePageContainerState extends State<HomePageContainer> {
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.only(top: 16, bottom: 24),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) =>
-                            _buildVaultListItem(context, vaultList[index]),
-                        childCount: snapshot.data?.length ?? 0,
+                    sliver: SlidableAutoCloseBehavior(
+                      child: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) =>
+                              _buildVaultListItem(context, vaultList[index]),
+                          childCount: snapshot.data?.length ?? 0,
+                        ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               );
             } else {
