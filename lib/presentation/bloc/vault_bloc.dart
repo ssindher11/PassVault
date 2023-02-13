@@ -7,10 +7,20 @@ class VaultBloc {
 
   VaultBloc(this._vaultRepository);
 
-  final BehaviorSubject<List<VaultModel>> _vaultsList =
+  final BehaviorSubject<List<VaultModel>> _allVaultsList =
       BehaviorSubject.seeded([]);
 
-  Stream<List<VaultModel>> get vaultList => _vaultsList.stream;
+  Stream<List<VaultModel>> get allVaultsList => _allVaultsList.stream;
+
+  final BehaviorSubject<List<VaultModel>> _recentVaultsList =
+      BehaviorSubject.seeded([]);
+
+  Stream<List<VaultModel>> get recentVaultsList => _recentVaultsList.stream;
+
+  final BehaviorSubject<List<VaultModel>> _favouriteVaultsList =
+      BehaviorSubject.seeded([]);
+
+  Stream<List<VaultModel>> get favouriteVaultsList => _favouriteVaultsList.stream;
 
   final BehaviorSubject<Map<String, int>> _categoryCount =
       BehaviorSubject.seeded({});
@@ -19,17 +29,17 @@ class VaultBloc {
 
   void fetchAllVaults({String query = ''}) {
     final vaultsStream = _vaultRepository.fetchAllVaults(query);
-    _vaultsList.sink.addStream(vaultsStream);
+    _allVaultsList.sink.addStream(vaultsStream);
   }
 
   void fetchAllVaultsOrderedByRecent({String query = ''}) {
     final vaultsStream = _vaultRepository.fetchAllVaultsOrderedByRecent(query);
-    _vaultsList.sink.addStream(vaultsStream);
+    _recentVaultsList.sink.addStream(vaultsStream);
   }
 
   void fetchAllVaultsIfFavourites({String query = ''}) {
     final vaultsStream = _vaultRepository.fetchAllVaultsIfFavourites(query);
-    _vaultsList.sink.addStream(vaultsStream);
+    _favouriteVaultsList.sink.addStream(vaultsStream);
   }
 
   void fetchAllVaultsFromCategory(String category, {String query = ''}) {
@@ -37,7 +47,7 @@ class VaultBloc {
       category,
       query,
     );
-    _vaultsList.sink.addStream(vaultsStream);
+    _allVaultsList.sink.addStream(vaultsStream);
   }
 
   void toggleVaultIsFavourite(VaultModel vaultModel) {
@@ -59,13 +69,15 @@ class VaultBloc {
 
   void updateCategoryCount() {
     Map<String, int> countMap = {};
-    for (var vault in _vaultsList.value) {
+    for (var vault in _allVaultsList.value) {
       countMap[vault.category] = (countMap[vault.category] ?? 0) + 1;
     }
     _categoryCount.sink.add(countMap);
   }
 
   void dispose() {
-    _vaultsList.close();
+    _allVaultsList.close();
+    _recentVaultsList.close();
+    _favouriteVaultsList.close();
   }
 }

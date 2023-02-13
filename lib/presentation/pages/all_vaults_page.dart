@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pass_vault/presentation/views/custom_choice_chip.dart';
 
-import '../../domain/usecases/get_favicon_use_case.dart';
+import '../../domain/entities/vault_model.dart';
+import '../../external/flutter_slidable/flutter_slidable.dart';
+import '../../injection.dart';
 import '../../res/res.dart';
+import '../bloc/vault_bloc.dart';
+import '../views/custom_choice_chip.dart';
+import '../views/no_items_container.dart';
+import '../views/vault_list_item.dart';
+import 'create_vault_page.dart';
 
 class AllVaultsPage extends StatefulWidget {
   const AllVaultsPage({Key? key}) : super(key: key);
@@ -13,9 +19,24 @@ class AllVaultsPage extends StatefulWidget {
 }
 
 class _AllVaultsPageState extends State<AllVaultsPage> {
-  final IGetFaviconUseCase _getFaviconUseCase = GetFaviconUseCase();
+  final VaultBloc _vaultBloc = locator<VaultBloc>();
+
   final _selectedIndex = 0.obs;
   final _chipChoicesList = ["All", "Recent", "Favourite"];
+
+  @override
+  void initState() {
+    super.initState();
+    _vaultBloc.fetchAllVaults();
+    _vaultBloc.fetchAllVaultsOrderedByRecent();
+    _vaultBloc.fetchAllVaultsIfFavourites();
+  }
+
+  @override
+  void dispose() {
+    _vaultBloc.dispose();
+    super.dispose();
+  }
 
   Widget _buildAppBar(BuildContext context) {
     return Container(
@@ -107,9 +128,7 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
                 backgroundColor: Colors.white,
                 selectedColor: redPrimary,
                 selected: isChipSelected,
-                onSelected: () {
-                  _selectedIndex.value = index;
-                },
+                onSelected: () => _selectedIndex.value = index,
                 labelPadding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 8,
@@ -123,9 +142,87 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
     );
   }
 
+  Widget _buildNoItemsContainer() {
+    return const SliverToBoxAdapter(
+      child: NoItemsContainer(
+        message: "Click on '+'\nto add vaults",
+      ),
+    );
+  }
+
+  Widget _buildVaultListItem(BuildContext ctx, VaultModel vaultModel) {
+    return Slidable(
+      groupTag: '1',
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        extentRatio: 0.35,
+        children: [
+          CustomSlidableAction(
+            onPressed: null,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.transparent,
+            autoClose: true,
+            child: FloatingActionButton.small(
+              onPressed: () {
+                // slidableKey.currentState?.controller.close();
+              },
+              backgroundColor: darkBlue,
+              child: const Icon(Icons.edit_outlined),
+            ),
+          ),
+          CustomSlidableAction(
+            onPressed: null,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.transparent,
+            autoClose: false,
+            child: FloatingActionButton.small(
+              onPressed: () {
+                // slidableKey.currentState?.controller.close();
+                _vaultBloc.deleteVault(vaultModel);
+              },
+              backgroundColor: redPrimary,
+              child: const Icon(Icons.delete_outline),
+            ),
+          ),
+        ],
+      ),
+      child: VaultListItem(
+        vaultModel: vaultModel,
+        onFavouriteClick: () => _vaultBloc.toggleVaultIsFavourite(vaultModel),
+      ),
+    );
+  }
+
+  Stream<List<VaultModel>> _getStream() {
+    switch (_selectedIndex.value) {
+      case 0:
+        return _vaultBloc.allVaultsList;
+
+      case 1:
+        return _vaultBloc.recentVaultsList;
+
+      case 2:
+        return _vaultBloc.favouriteVaultsList;
+
+      default:
+        return _vaultBloc.allVaultsList;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CreateVaultPage()),
+          );
+        },
+        backgroundColor: redPrimary,
+        heroTag: null,
+        child: const Icon(Icons.add),
+      ),
       body: Stack(
         children: [
           SizedBox.fromSize(
@@ -154,6 +251,34 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
                       SliverPadding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         sliver: _buildChoiceChipRow(),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.only(top: 16, bottom: 24),
+                        sliver: SlidableAutoCloseBehavior(
+                          child: Obx(
+                            () => StreamBuilder(
+                              stream: _getStream(),
+                              builder: (context, snapshot) {
+                                if (snapshot.data != null) {
+                                  final vaultList = snapshot.data ?? [];
+                                  if (vaultList.isNotEmpty) {
+                                    return SliverList(
+                                      delegate: SliverChildBuilderDelegate(
+                                        (context, index) => _buildVaultListItem(
+                                            context, vaultList[index]),
+                                        childCount: snapshot.data?.length ?? 0,
+                                      ),
+                                    );
+                                  } else {
+                                    return _buildNoItemsContainer();
+                                  }
+                                } else {
+                                  return _buildNoItemsContainer();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
