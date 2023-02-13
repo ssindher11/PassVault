@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pass_vault/domain/entities/vault_model.dart';
 import 'package:pass_vault/injection.dart';
 import 'package:pass_vault/presentation/bloc/vault_bloc.dart';
 import 'package:pass_vault/presentation/pages/all_vaults_page.dart';
 import 'package:pass_vault/presentation/views/category_row.dart';
 import 'package:pass_vault/presentation/views/vault_list_item.dart';
-import 'package:pass_vault/res/color.dart';
-import 'package:pass_vault/res/images.dart';
+import 'package:pass_vault/res/res.dart';
 
 import 'package:pass_vault/external/flutter_slidable/flutter_slidable.dart';
+
+import '../views/no_items_container.dart';
 
 class HomePageContainer extends StatefulWidget {
   const HomePageContainer({Key? key}) : super(key: key);
@@ -64,24 +64,7 @@ class _HomePageContainerState extends State<HomePageContainer> {
   }
 
   Widget _buildNoItemsContainer() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 150, 20, 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SvgPicture.asset(addFiles),
-          const Text(
-            "Click on '+'\nto get started",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: darkTextColor,
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
-          )
-        ],
-      ),
-    );
+    return const NoItemsContainer(message: "Click on '+'\nto get started",);
   }
 
   Widget _buildRecentlyUsedRow(BuildContext context) {
@@ -175,7 +158,7 @@ class _HomePageContainerState extends State<HomePageContainer> {
       ),
       clipBehavior: Clip.hardEdge,
       child: StreamBuilder(
-        stream: _vaultBloc.vaultList,
+        stream: _vaultBloc.recentVaultsList,
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             final vaultList = snapshot.data!;
