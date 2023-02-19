@@ -12,6 +12,6 @@ class CreateVaultBloc {
   }
 
   Future<void> updateVault(VaultModel vaultModel) async {
-    await vaultRepository.addVault(vaultModel);
+    await vaultRepository.updateVault(vaultModel);
   }
 }

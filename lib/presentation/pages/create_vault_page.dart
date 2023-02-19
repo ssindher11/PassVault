@@ -13,7 +13,9 @@ import '../../utils/debouncer.dart';
 import 'generate_password_page.dart';
 
 class CreateVaultPage extends StatefulWidget {
-  const CreateVaultPage({Key? key}) : super(key: key);
+  const CreateVaultPage({this.vaultModel, Key? key}) : super(key: key);
+
+  final VaultModel? vaultModel;
 
   @override
   State<CreateVaultPage> createState() => _CreateVaultPageState();
@@ -36,10 +38,20 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
   final _categoriesList = [Category.browser, Category.mobile, Category.payment];
   Category? _selectedCategory = Category.browser;
 
+  bool get _isCreateMode => widget.vaultModel == null;
+
   final _obscureText = true.obs;
 
   _CreateVaultPageState() {
     _selectedCategory = _categoriesList[0];
+  }
+
+  void _setExistingFields() {
+    final vault = widget.vaultModel!;
+    _selectedCategory = vault.category;
+    _siteAddressController.text = vault.siteAddress;
+    _usernameController.text = vault.username;
+    _passwordController.text = vault.passwordHash;
   }
 
   @override
@@ -50,6 +62,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
         _siteAddress.value = _siteAddressController.text;
       });
     });
+    if (!_isCreateMode) _setExistingFields();
   }
 
   @override
@@ -62,7 +75,9 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return const SimpleAppBar(title: 'Create New Vault');
+    return SimpleAppBar(
+      title: _isCreateMode ? 'Create New Vault' : 'Edit Vault',
+    );
   }
 
   Widget _buildCredentialSection() {
@@ -383,6 +398,31 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
     }
   }
 
+  void _updateVault() {
+    String username = _usernameController.text;
+    String siteAddress = _siteAddressController.text;
+    String password = _passwordController.text;
+    if (username.isNotEmpty && siteAddress.isNotEmpty && password.isNotEmpty) {
+      VaultModel vaultModel = widget.vaultModel!;
+      final updatedVaultModel = VaultModel(
+        id: vaultModel.id,
+        category: _selectedCategory ?? Category.browser,
+        username: username,
+        siteAddress: siteAddress,
+        passwordHash: password,
+        isFavourite: vaultModel.isFavourite,
+      );
+      _createVaultBloc
+          .updateVault(updatedVaultModel)
+          .then((_) => Navigator.pop(context));
+    } else {
+      usernameError = username.isEmpty ? 'Enter username' : null;
+      siteAddressError = siteAddress.isEmpty ? 'Enter website/app name' : null;
+      passwordError = password.isEmpty ? 'Enter password' : null;
+      setState(() {});
+    }
+  }
+
   var isChipSelected = false;
 
   @override
@@ -447,7 +487,8 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                             width: double.infinity,
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             child: ElevatedButton(
-                              onPressed: _createVault,
+                              onPressed:
+                                  _isCreateMode ? _createVault : _updateVault,
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all(redPrimary),
@@ -457,11 +498,13 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                                   ),
                                 ),
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(16),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
                                 child: Text(
-                                  'Create the vault',
-                                  style: TextStyle(
+                                  _isCreateMode
+                                      ? 'Create the vault'
+                                      : 'Update details',
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),

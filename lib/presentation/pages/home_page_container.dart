@@ -11,6 +11,7 @@ import 'package:pass_vault/res/res.dart';
 import 'package:pass_vault/external/flutter_slidable/flutter_slidable.dart';
 
 import '../views/no_items_container.dart';
+import 'create_vault_page.dart';
 
 class HomePageContainer extends StatefulWidget {
   const HomePageContainer({Key? key}) : super(key: key);
@@ -119,6 +120,14 @@ class _HomePageContainerState extends State<HomePageContainer> {
             autoClose: true,
             child: FloatingActionButton.small(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateVaultPage(
+                      vaultModel: vaultModel,
+                    ),
+                  ),
+                );
                 slidableKey.currentState?.controller.close();
               },
               backgroundColor: darkBlue,

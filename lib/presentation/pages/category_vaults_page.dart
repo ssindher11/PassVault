@@ -10,6 +10,7 @@ import '../../res/res.dart';
 import '../views/no_items_container.dart';
 import '../views/vault_list_item.dart';
 import '../views/simple_app_bar.dart';
+import 'create_vault_page.dart';
 
 class CategoryVaultsPage extends StatelessWidget {
   CategoryVaultsPage({
@@ -65,7 +66,7 @@ class CategoryVaultsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildVaultListItem(VaultModel vaultModel) {
+  Widget _buildVaultListItem(BuildContext context, VaultModel vaultModel) {
     return Slidable(
       groupTag: '1',
       endActionPane: ActionPane(
@@ -79,6 +80,14 @@ class CategoryVaultsPage extends StatelessWidget {
             autoClose: true,
             child: FloatingActionButton.small(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateVaultPage(
+                      vaultModel: vaultModel,
+                    ),
+                  ),
+                );
                 // slidableKey.currentState?.controller.close();
               },
               backgroundColor: darkBlue,
@@ -153,6 +162,7 @@ class CategoryVaultsPage extends StatelessWidget {
                                     return SliverList(
                                       delegate: SliverChildBuilderDelegate(
                                         (context, index) => _buildVaultListItem(
+                                          context,
                                           vaultList[index],
                                         ),
                                         childCount: snapshot.data?.length ?? 0,
