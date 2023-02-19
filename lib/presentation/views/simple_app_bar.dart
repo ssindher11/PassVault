@@ -17,13 +17,28 @@ class SimpleAppBar extends StatelessWidget {
       width: double.infinity,
       height: 56,
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          FloatingActionButton.small(
-            onPressed: onBackPress,
-            backgroundColor: Colors.white,
-            foregroundColor: darkBlue,
-            child: const Icon(Icons.arrow_back),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FloatingActionButton.small(
+              onPressed: () => onBackPress ?? Navigator.pop(context),
+              backgroundColor: Colors.white,
+              foregroundColor: darkBlue,
+              child: const Icon(Icons.arrow_back),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: darkBlue,
+              ),
+            ),
           ),
         ],
       ),
