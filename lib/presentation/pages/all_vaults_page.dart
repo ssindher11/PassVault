@@ -134,6 +134,14 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
             autoClose: true,
             child: FloatingActionButton.small(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateVaultPage(
+                      vaultModel: vaultModel,
+                    ),
+                  ),
+                );
                 // slidableKey.currentState?.controller.close();
               },
               backgroundColor: darkBlue,
