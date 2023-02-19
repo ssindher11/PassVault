@@ -2,6 +2,8 @@ import 'package:pass_vault/domain/entities/vault_model.dart';
 import 'package:pass_vault/domain/repositories/vault_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/entities/category.dart';
+
 class VaultBloc {
   final VaultRepository _vaultRepository;
 
@@ -23,10 +25,10 @@ class VaultBloc {
   Stream<List<VaultModel>> get favouriteVaultsList =>
       _favouriteVaultsList.stream;
 
-  final BehaviorSubject<Map<String, int>> _categoryCount =
+  final BehaviorSubject<Map<Category, int>> _categoryCount =
       BehaviorSubject.seeded({});
 
-  Stream<Map<String, int>> get categoryCount => _categoryCount.stream;
+  Stream<Map<Category, int>> get categoryCount => _categoryCount.stream;
 
   void fetchAllVaults({String query = ''}) {
     final vaultsStream = _vaultRepository.fetchAllVaults(query);
@@ -84,7 +86,7 @@ class VaultBloc {
   }
 
   void updateCategoryCount() {
-    Map<String, int> countMap = {};
+    Map<Category, int> countMap = {};
     for (var vault in _recentVaultsList.value) {
       countMap[vault.category] = (countMap[vault.category] ?? 0) + 1;
     }

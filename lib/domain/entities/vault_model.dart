@@ -1,6 +1,8 @@
+import 'category.dart';
+
 class VaultModel {
   final int? id;
-  final String category;
+  final Category category;
   final String username;
   final String siteAddress;
   final String passwordHash;

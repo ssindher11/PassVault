@@ -4,5 +4,6 @@ enum Category {
   payment("Payment");
 
   const Category(this.value);
+
   final String value;
 }
