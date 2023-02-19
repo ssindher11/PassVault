@@ -3,6 +3,7 @@ import 'package:pass_vault/domain/entities/vault_model.dart';
 import 'package:pass_vault/injection.dart';
 import 'package:pass_vault/presentation/bloc/vault_bloc.dart';
 import 'package:pass_vault/presentation/pages/all_vaults_page.dart';
+import 'package:pass_vault/presentation/pages/category_vaults_page.dart';
 import 'package:pass_vault/presentation/views/category_row.dart';
 import 'package:pass_vault/presentation/views/vault_list_item.dart';
 import 'package:pass_vault/res/res.dart';
@@ -64,7 +65,9 @@ class _HomePageContainerState extends State<HomePageContainer> {
   }
 
   Widget _buildNoItemsContainer() {
-    return const NoItemsContainer(message: "Click on '+'\nto get started",);
+    return const NoItemsContainer(
+      message: "Click on '+'\nto get started",
+    );
   }
 
   Widget _buildRecentlyUsedRow(BuildContext context) {
@@ -99,7 +102,7 @@ class _HomePageContainerState extends State<HomePageContainer> {
     );
   }
 
-  Widget _buildVaultListItem(BuildContext ctx, VaultModel vaultModel) {
+  Widget _buildVaultListItem(VaultModel vaultModel) {
     final slidableKey = GlobalKey<SlidableState>();
 
     return Slidable(
@@ -180,7 +183,16 @@ class _HomePageContainerState extends State<HomePageContainer> {
                         builder: (context, snapshot) {
                           return CategoryRow(
                             categoryCount: snapshot.data ?? {},
-                            onCategoryClick: (category) {},
+                            onCategoryClick: (category) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CategoryVaultsPage(
+                                    category: category,
+                                  ),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),
@@ -198,8 +210,9 @@ class _HomePageContainerState extends State<HomePageContainer> {
                     sliver: SlidableAutoCloseBehavior(
                       child: SliverList(
                         delegate: SliverChildBuilderDelegate(
-                          (context, index) =>
-                              _buildVaultListItem(context, vaultList[index]),
+                          (context, index) => _buildVaultListItem(
+                            vaultList[index],
+                          ),
                           childCount: snapshot.data?.length ?? 0,
                         ),
                       ),

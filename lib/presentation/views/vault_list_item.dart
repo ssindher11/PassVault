@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pass_vault/domain/entities/vault_model.dart';
 import 'package:pass_vault/injection.dart';
@@ -24,6 +27,8 @@ class VaultListItem extends StatelessWidget {
   void _togglePasswordVisible() {
     _isPasswordVisible.value = !_isPasswordVisible.value;
   }
+
+  final _showClipboard = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +98,28 @@ class VaultListItem extends StatelessWidget {
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: darkBlue,
+                            size: 16,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Clipboard.setData(
+                              ClipboardData(text: vaultModel.passwordHash),
+                            ).then(
+                              (_) {
+                                _showClipboard.value = false;
+                                Timer(
+                                  const Duration(seconds: 1),
+                                  () => _showClipboard.value = true,
+                                );
+                              },
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(8),
+                          child: Icon(
+                            _showClipboard.value ? Icons.copy : Icons.done,
+                            color:
+                                _showClipboard.value ? darkBlue : Colors.green,
                             size: 16,
                           ),
                         ),

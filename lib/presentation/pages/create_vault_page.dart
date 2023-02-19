@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:pass_vault/domain/entities/vault_model.dart';
 import 'package:pass_vault/injection.dart';
 import 'package:pass_vault/presentation/bloc/create_vault_bloc.dart';
+import 'package:pass_vault/presentation/views/simple_app_bar.dart';
 import 'package:pass_vault/res/images.dart';
 
+import '../../domain/entities/category.dart';
 import '../../domain/usecases/get_favicon_use_case.dart';
 import '../../res/color.dart';
 import '../../utils/debouncer.dart';
@@ -30,8 +32,8 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
   String? siteAddressError;
   String? passwordError;
 
-  final _categoriesList = ["Browser", "Mobile app", "Payment"];
-  String? _selectedCategory = "Browser";
+  final _categoriesList = [Category.browser, Category.mobile, Category.payment];
+  Category? _selectedCategory = Category.browser;
 
   final _obscureText = true.obs;
 
@@ -59,36 +61,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 56,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: FloatingActionButton.small(
-              onPressed: () => Navigator.pop(context),
-              backgroundColor: Colors.white,
-              foregroundColor: darkBlue,
-              child: const Icon(Icons.arrow_back),
-            ),
-          ),
-          const Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Create New Vault',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: darkBlue,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return const SimpleAppBar(title: 'Create New Vault');
   }
 
   Widget _buildCredentialSection() {
@@ -125,7 +98,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
             items: _categoriesList
                 .map((item) => DropdownMenuItem(
                       value: item,
-                      child: Text(item),
+                      child: Text(item.value),
                     ))
                 .toList(),
             onChanged: (selectedValue) {
@@ -377,7 +350,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
     String password = _passwordController.text;
     if (username.isNotEmpty && siteAddress.isNotEmpty && password.isNotEmpty) {
       VaultModel vaultModel = VaultModel(
-        category: _selectedCategory ?? 'Browser',
+        category: (_selectedCategory ?? Category.browser).value,
         username: _usernameController.text,
         siteAddress: _siteAddressController.text,
         passwordHash: _passwordController.text,

@@ -37,15 +37,15 @@ abstract class VaultDao {
   Stream<List<Vault>> fetchAllVaultsOrderedByRecent(String query);
 
   @Query('SELECT * FROM vault '
-      'WHERE is_favourite = true AND UPPER(username) LIKE UPPER(:query) '
-      'OR UPPER(site_address) LIKE UPPER(:query) '
+      'WHERE is_favourite = true AND (UPPER(username) LIKE UPPER(:query) '
+      'OR UPPER(site_address) LIKE UPPER(:query)) '
       'ORDER BY username ASC')
   Stream<List<Vault>> fetchAllVaultsIfFavourites(String query);
 
   @Query('SELECT * FROM vault '
       'WHERE category = :category '
-      'AND UPPER(username) LIKE UPPER(:query) '
-      'OR UPPER(site_address) LIKE UPPER(:query) '
+      'AND (UPPER(username) LIKE UPPER(:query) '
+      'OR UPPER(site_address) LIKE UPPER(:query)) '
       'ORDER BY username ASC')
   Stream<List<Vault>> fetchAllVaultsFromCategory(String category, String query);
 }

@@ -85,7 +85,7 @@ class VaultBloc {
 
   void updateCategoryCount() {
     Map<String, int> countMap = {};
-    for (var vault in _allVaultsList.value) {
+    for (var vault in _recentVaultsList.value) {
       countMap[vault.category] = (countMap[vault.category] ?? 0) + 1;
     }
     _categoryCount.sink.add(countMap);

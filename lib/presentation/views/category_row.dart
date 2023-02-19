@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pass_vault/res/color.dart';
 import 'package:pass_vault/res/images.dart';
 
+import '../../domain/entities/category.dart';
+
 class CategoryRow extends StatelessWidget {
   const CategoryRow({
     required this.categoryCount,
@@ -11,7 +13,7 @@ class CategoryRow extends StatelessWidget {
   }) : super(key: key);
 
   final Map<String, int> categoryCount;
-  final Function(String category) onCategoryClick;
+  final Function(Category category) onCategoryClick;
 
   @override
   Widget build(BuildContext context) {
@@ -21,30 +23,30 @@ class CategoryRow extends StatelessWidget {
         Expanded(
           flex: 2,
           child: CategoryCard(
-            categoryName: 'Browser',
+            categoryName: Category.browser.value,
             iconPath: categoryBrowser,
-            numPasswords: categoryCount['Browser'] ?? 0,
-            onTap: () => onCategoryClick('Browser'),
+            numPasswords: categoryCount[Category.browser.value] ?? 0,
+            onTap: () => onCategoryClick(Category.browser),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           flex: 2,
           child: CategoryCard(
-            categoryName: 'Mobile app',
+            categoryName: Category.mobile.value,
             iconPath: categoryMobile,
-            numPasswords: categoryCount['Mobile app'] ?? 0,
-            onTap: () => onCategoryClick('Mobile app'),
+            numPasswords: categoryCount[Category.mobile.value] ?? 0,
+            onTap: () => onCategoryClick(Category.mobile),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           flex: 2,
           child: CategoryCard(
-            categoryName: 'Payment',
+            categoryName: Category.payment.value,
             iconPath: categoryPayment,
-            numPasswords: categoryCount['Payment'] ?? 0,
-            onTap: () => onCategoryClick('BrowserPayment'),
+            numPasswords: categoryCount[Category.payment.value] ?? 0,
+            onTap: () => onCategoryClick(Category.payment),
           ),
         ),
       ],

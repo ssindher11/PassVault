@@ -208,7 +208,7 @@ class _$VaultDao extends VaultDao {
   @override
   Stream<List<Vault>> fetchAllVaultsIfFavourites(String query) {
     return _queryAdapter.queryListStream(
-        'SELECT * FROM vault WHERE is_favourite = true AND UPPER(username) LIKE UPPER(?1) OR UPPER(site_address) LIKE UPPER(?1) ORDER BY username ASC',
+        'SELECT * FROM vault WHERE is_favourite = true AND (UPPER(username) LIKE UPPER(?1) OR UPPER(site_address) LIKE UPPER(?1)) ORDER BY username ASC',
         mapper: (Map<String, Object?> row) => Vault(
             row['id'] as int?,
             row['category'] as String,
@@ -228,7 +228,7 @@ class _$VaultDao extends VaultDao {
     String query,
   ) {
     return _queryAdapter.queryListStream(
-        'SELECT * FROM vault WHERE category = ?1 AND UPPER(username) LIKE UPPER(?2) OR UPPER(site_address) LIKE UPPER(?2) ORDER BY username ASC',
+        'SELECT * FROM vault WHERE category = ?1 AND (UPPER(username) LIKE UPPER(?2) OR UPPER(site_address) LIKE UPPER(?2)) ORDER BY username ASC',
         mapper: (Map<String, Object?> row) => Vault(
             row['id'] as int?,
             row['category'] as String,
