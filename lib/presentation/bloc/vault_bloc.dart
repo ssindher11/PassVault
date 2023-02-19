@@ -20,7 +20,8 @@ class VaultBloc {
   final BehaviorSubject<List<VaultModel>> _favouriteVaultsList =
       BehaviorSubject.seeded([]);
 
-  Stream<List<VaultModel>> get favouriteVaultsList => _favouriteVaultsList.stream;
+  Stream<List<VaultModel>> get favouriteVaultsList =>
+      _favouriteVaultsList.stream;
 
   final BehaviorSubject<Map<String, int>> _categoryCount =
       BehaviorSubject.seeded({});
@@ -50,6 +51,21 @@ class VaultBloc {
     _allVaultsList.sink.addStream(vaultsStream);
   }
 
+  Stream<List<VaultModel>> getAllVaultsStream({String query = ''}) =>
+      _vaultRepository.fetchAllVaults(query);
+
+  Stream<List<VaultModel>> getRecentVaultsStream({String query = ''}) =>
+      _vaultRepository.fetchAllVaultsOrderedByRecent(query);
+
+  Stream<List<VaultModel>> getFavouriteVaultsStream({String query = ''}) =>
+      _vaultRepository.fetchAllVaultsIfFavourites(query);
+
+  Stream<List<VaultModel>> getCategoryVaultsStream(
+    String category, {
+    String query = '',
+  }) =>
+      _vaultRepository.fetchAllVaultsFromCategory(category, query);
+
   void toggleVaultIsFavourite(VaultModel vaultModel) {
     final updatedVault = VaultModel(
       id: vaultModel.id,
@@ -77,7 +93,5 @@ class VaultBloc {
 
   void dispose() {
     _allVaultsList.close();
-    _recentVaultsList.close();
-    _favouriteVaultsList.close();
   }
 }
