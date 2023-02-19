@@ -26,6 +26,7 @@ class SimpleAppBar extends StatelessWidget {
               onPressed: () => onBackPress ?? Navigator.pop(context),
               backgroundColor: Colors.white,
               foregroundColor: darkBlue,
+              heroTag: null,
               child: const Icon(Icons.arrow_back),
             ),
           ),
