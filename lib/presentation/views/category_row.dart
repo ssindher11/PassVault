@@ -12,7 +12,7 @@ class CategoryRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Map<String, int> categoryCount;
+  final Map<Category, int> categoryCount;
   final Function(Category category) onCategoryClick;
 
   @override
@@ -25,7 +25,7 @@ class CategoryRow extends StatelessWidget {
           child: CategoryCard(
             categoryName: Category.browser.value,
             iconPath: categoryBrowser,
-            numPasswords: categoryCount[Category.browser.value] ?? 0,
+            numPasswords: categoryCount[Category.browser] ?? 0,
             onTap: () => onCategoryClick(Category.browser),
           ),
         ),
@@ -35,7 +35,7 @@ class CategoryRow extends StatelessWidget {
           child: CategoryCard(
             categoryName: Category.mobile.value,
             iconPath: categoryMobile,
-            numPasswords: categoryCount[Category.mobile.value] ?? 0,
+            numPasswords: categoryCount[Category.mobile] ?? 0,
             onTap: () => onCategoryClick(Category.mobile),
           ),
         ),
@@ -45,7 +45,7 @@ class CategoryRow extends StatelessWidget {
           child: CategoryCard(
             categoryName: Category.payment.value,
             iconPath: categoryPayment,
-            numPasswords: categoryCount[Category.payment.value] ?? 0,
+            numPasswords: categoryCount[Category.payment] ?? 0,
             onTap: () => onCategoryClick(Category.payment),
           ),
         ),

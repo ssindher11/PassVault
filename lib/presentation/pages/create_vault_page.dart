@@ -366,7 +366,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
     String password = _passwordController.text;
     if (username.isNotEmpty && siteAddress.isNotEmpty && password.isNotEmpty) {
       VaultModel vaultModel = VaultModel(
-        category: (_selectedCategory ?? Category.browser).value,
+        category: (_selectedCategory ?? Category.browser),
         username: _usernameController.text,
         siteAddress: _siteAddressController.text,
         passwordHash: _passwordController.text,
