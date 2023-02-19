@@ -10,6 +10,7 @@ import '../../domain/entities/category.dart';
 import '../../domain/usecases/get_favicon_use_case.dart';
 import '../../res/color.dart';
 import '../../utils/debouncer.dart';
+import 'generate_password_page.dart';
 
 class CreateVaultPage extends StatefulWidget {
   const CreateVaultPage({Key? key}) : super(key: key);
@@ -134,7 +135,9 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
           const SizedBox(height: 4),
           TextField(
             controller: _siteAddressController,
-            onChanged: (_) => setState(() { siteAddressError = null; }),
+            onChanged: (_) => setState(() {
+              siteAddressError = null;
+            }),
             maxLines: 1,
             decoration: InputDecoration(
                 contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
@@ -170,7 +173,9 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
           const SizedBox(height: 4),
           TextField(
             controller: _usernameController,
-            onChanged: (_) => setState(() { usernameError = null; }),
+            onChanged: (_) => setState(() {
+              usernameError = null;
+            }),
             maxLines: 1,
             decoration: InputDecoration(
                 contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
@@ -210,7 +215,9 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                 child: Obx(
                   () => TextField(
                     controller: _passwordController,
-                    onChanged: (_) => setState(() { passwordError = null; }),
+                    onChanged: (_) => setState(() {
+                      passwordError = null;
+                    }),
                     maxLines: 1,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
@@ -264,7 +271,16 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
               ),
               const SizedBox(width: 4),
               FloatingActionButton.small(
-                onPressed: () {},
+                onPressed: () async {
+                  final String? result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GeneratePasswordPage()),
+                  );
+                  if (result != null) {
+                    _passwordController.text = result;
+                  }
+                },
                 backgroundColor: redPrimary,
                 heroTag: null,
                 tooltip: 'Generate Password',
@@ -356,7 +372,9 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
         passwordHash: _passwordController.text,
         isFavourite: false,
       );
-      _createVaultBloc.createVault(vaultModel).then((_) => Navigator.pop(context));
+      _createVaultBloc
+          .createVault(vaultModel)
+          .then((_) => Navigator.pop(context));
     } else {
       usernameError = username.isEmpty ? 'Enter username' : null;
       siteAddressError = siteAddress.isEmpty ? 'Enter website/app name' : null;
