@@ -26,21 +26,26 @@ abstract class VaultDao {
 
   @Query('SELECT * FROM vault '
       'WHERE UPPER(username) LIKE UPPER(:query) '
+      'OR UPPER(site_address) LIKE UPPER(:query) '
       'ORDER BY username ASC')
   Stream<List<Vault>> fetchAllVaults(String query);
 
   @Query('SELECT * FROM vault '
       'WHERE UPPER(username) LIKE UPPER(:query) '
+      'OR UPPER(site_address) LIKE UPPER(:query) '
       'ORDER BY updated_at DESC, username ASC')
   Stream<List<Vault>> fetchAllVaultsOrderedByRecent(String query);
 
   @Query('SELECT * FROM vault '
       'WHERE is_favourite = true AND UPPER(username) LIKE UPPER(:query) '
+      'OR UPPER(site_address) LIKE UPPER(:query) '
       'ORDER BY username ASC')
   Stream<List<Vault>> fetchAllVaultsIfFavourites(String query);
 
   @Query('SELECT * FROM vault '
-      'WHERE category = :category AND UPPER(username) LIKE UPPER(:query) '
+      'WHERE category = :category '
+      'AND UPPER(username) LIKE UPPER(:query) '
+      'OR UPPER(site_address) LIKE UPPER(:query) '
       'ORDER BY username ASC')
   Stream<List<Vault>> fetchAllVaultsFromCategory(String category, String query);
 }

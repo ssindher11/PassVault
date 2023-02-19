@@ -23,18 +23,13 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
 
   final _selectedIndex = 0.obs;
   final _chipChoicesList = ["All", "Recent", "Favourite"];
-
-  @override
-  void initState() {
-    super.initState();
-    _vaultBloc.fetchAllVaults();
-    _vaultBloc.fetchAllVaultsOrderedByRecent();
-    _vaultBloc.fetchAllVaultsIfFavourites();
-  }
+  final _queryText = ''.obs;
+  final _searchTextController = TextEditingController();
 
   @override
   void dispose() {
     _vaultBloc.dispose();
+    _searchTextController.dispose();
     super.dispose();
   }
 
@@ -74,6 +69,8 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
   Widget _buildSearchField() {
     return SliverToBoxAdapter(
       child: TextField(
+        controller: _searchTextController,
+        onChanged: (newText) => _queryText.value = newText,
         maxLines: 1,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
@@ -97,6 +94,7 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
         ),
         style: const TextStyle(color: darkTextColor),
         cursorColor: darkTextColor,
+        autocorrect: false,
       ),
     );
   }
@@ -196,16 +194,16 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
   Stream<List<VaultModel>> _getStream() {
     switch (_selectedIndex.value) {
       case 0:
-        return _vaultBloc.allVaultsList;
+        return _vaultBloc.getAllVaultsStream(query: _queryText.value);
 
       case 1:
-        return _vaultBloc.recentVaultsList;
+        return _vaultBloc.getRecentVaultsStream(query: _queryText.value);
 
       case 2:
-        return _vaultBloc.favouriteVaultsList;
+        return _vaultBloc.getFavouriteVaultsStream(query: _queryText.value);
 
       default:
-        return _vaultBloc.allVaultsList;
+        return _vaultBloc.getAllVaultsStream(query: _queryText.value);
     }
   }
 
