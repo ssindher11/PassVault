@@ -145,6 +145,7 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
                 // slidableKey.currentState?.controller.close();
               },
               backgroundColor: darkBlue,
+              heroTag: null,
               child: const Icon(Icons.edit_outlined),
             ),
           ),
@@ -159,6 +160,7 @@ class _AllVaultsPageState extends State<AllVaultsPage> {
                 _vaultBloc.deleteVault(vaultModel);
               },
               backgroundColor: redPrimary,
+              heroTag: null,
               child: const Icon(Icons.delete_outline),
             ),
           ),

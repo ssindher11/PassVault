@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cutetech.pass_vault">
-   <application
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
         android:label="PassVault"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">

@@ -131,6 +131,7 @@ class _HomePageContainerState extends State<HomePageContainer> {
                 slidableKey.currentState?.controller.close();
               },
               backgroundColor: darkBlue,
+              heroTag: null,
               child: const Icon(Icons.edit_outlined),
             ),
           ),
@@ -145,6 +146,7 @@ class _HomePageContainerState extends State<HomePageContainer> {
                 _vaultBloc.deleteVault(vaultModel);
               },
               backgroundColor: redPrimary,
+              heroTag: null,
               child: const Icon(Icons.delete_outline),
             ),
           ),

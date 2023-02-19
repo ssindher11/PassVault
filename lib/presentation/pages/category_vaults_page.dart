@@ -91,6 +91,7 @@ class CategoryVaultsPage extends StatelessWidget {
                 // slidableKey.currentState?.controller.close();
               },
               backgroundColor: darkBlue,
+              heroTag: null,
               child: const Icon(Icons.edit_outlined),
             ),
           ),
@@ -105,6 +106,7 @@ class CategoryVaultsPage extends StatelessWidget {
                 _vaultBloc.deleteVault(vaultModel);
               },
               backgroundColor: redPrimary,
+              heroTag: null,
               child: const Icon(Icons.delete_outline),
             ),
           ),
