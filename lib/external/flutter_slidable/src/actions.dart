@@ -120,6 +120,54 @@ class CustomSlidableAction extends StatelessWidget {
   }
 }
 
+class FabSlidableAction extends StatelessWidget {
+  const FabSlidableAction({
+    Key? key,
+    this.flex = _kFlex,
+    this.backgroundColor = _kBackgroundColor,
+    this.foregroundColor,
+    this.elevation = 6,
+    this.autoClose = _kAutoClose,
+    required this.onPressed,
+    required this.child,
+  })  : assert(flex > 0),
+        super(key: key);
+
+  final int flex;
+  final Color backgroundColor;
+  final Color? foregroundColor;
+  final bool autoClose;
+  final SlidableActionCallback? onPressed;
+  final double? elevation;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: flex,
+      child: SizedBox.expand(
+        child: Center(
+          child: FloatingActionButton.small(
+            onPressed: () => _handleTap(context),
+            backgroundColor: backgroundColor,
+            foregroundColor: foregroundColor,
+            heroTag: null,
+            elevation: elevation,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleTap(BuildContext context) {
+    onPressed?.call(context);
+    if (autoClose) {
+      Slidable.of(context)?.close();
+    }
+  }
+}
+
 /// An action for [Slidable] which can show an icon, a label, or both.
 class SlidableAction extends StatelessWidget {
   /// Creates a [SlidableAction].

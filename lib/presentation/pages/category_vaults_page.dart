@@ -71,44 +71,28 @@ class CategoryVaultsPage extends StatelessWidget {
       groupTag: '1',
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
-        extentRatio: 0.35,
+        extentRatio: 0.25,
         children: [
-          CustomSlidableAction(
-            onPressed: null,
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.transparent,
-            autoClose: true,
-            child: FloatingActionButton.small(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateVaultPage(
-                      vaultModel: vaultModel,
-                    ),
+          FabSlidableAction(
+            onPressed: (context) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateVaultPage(
+                    vaultModel: vaultModel,
                   ),
-                );
-                // slidableKey.currentState?.controller.close();
-              },
-              backgroundColor: darkBlue,
-              heroTag: null,
-              child: const Icon(Icons.edit_outlined),
-            ),
+                ),
+              );
+            },
+            backgroundColor: darkBlue,
+            child: const Icon(Icons.edit_outlined),
           ),
-          CustomSlidableAction(
-            onPressed: null,
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.transparent,
-            autoClose: false,
-            child: FloatingActionButton.small(
-              onPressed: () {
-                // slidableKey.currentState?.controller.close();
-                _vaultBloc.deleteVault(vaultModel);
-              },
-              backgroundColor: redPrimary,
-              heroTag: null,
-              child: const Icon(Icons.delete_outline),
-            ),
+          FabSlidableAction(
+            onPressed: (context) {
+              _vaultBloc.deleteVault(vaultModel);
+            },
+            backgroundColor: redPrimary,
+            child: const Icon(Icons.delete_outline),
           ),
         ],
       ),
