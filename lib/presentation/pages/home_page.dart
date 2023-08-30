@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pass_vault/presentation/pages/create_vault_page.dart';
+import 'package:pass_vault/presentation/pages/enter_passcode_page.dart';
 import 'package:pass_vault/presentation/views/greeting.dart';
 import 'package:pass_vault/res/color.dart';
 import 'package:pass_vault/res/images.dart';
@@ -49,7 +50,12 @@ class HomePage extends StatelessWidget {
                       const Greeting(name: 'Shrey'),
                       const Spacer(),
                       FloatingActionButton.small(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const EnterPasscodePage()),
+                          );
+                        },
                         foregroundColor: Colors.black,
                         backgroundColor: Colors.white,
                         heroTag: null,
