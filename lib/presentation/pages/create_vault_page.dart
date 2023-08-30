@@ -176,6 +176,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
             style: const TextStyle(color: darkTextColor),
             cursorColor: darkTextColor,
             textInputAction: TextInputAction.next,
+            autocorrect: false,
           ),
           const SizedBox(height: 12),
           const Text(
@@ -214,6 +215,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
             style: const TextStyle(color: darkTextColor),
             cursorColor: darkTextColor,
             textInputAction: TextInputAction.next,
+            autocorrect: false,
           ),
           const SizedBox(height: 12),
           const Text(
@@ -281,6 +283,7 @@ class _CreateVaultPageState extends State<CreateVaultPage> {
                     cursorColor: darkTextColor,
                     obscureText: _obscureText.value,
                     obscuringCharacter: '●',
+                    autocorrect: false,
                   ),
                 ),
               ),

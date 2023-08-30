@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         textTheme: textTheme,
         colorScheme: ThemeData().colorScheme.copyWith(primary: redPrimary),
       ),
+      debugShowCheckedModeBanner: false,
       scrollBehavior: GlowlessScrollBehavior(),
       home: const HomePage(),
       builder: (context, widget) {
