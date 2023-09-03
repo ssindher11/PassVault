@@ -1,10 +1,29 @@
-# PassVault
+# PassVault - Your Secure Password Manager
 
-Your passwords, secured.
-
-## Screenshots
+PassVault is a powerful cross-platform Flutter application designed to safeguard your most sensitive passwords and ensure your online security. With PassVault, you can securely store, generate, and categorize your passwords, providing you with a reliable digital vault right on your device.
 
 <img src="https://firebasestorage.googleapis.com/v0/b/portfolio-6b91d.appspot.com/o/passvault-cover.png?alt=media&token=d3e9e001-e58b-4b3d-ab8f-ae9820308dd2" alt="Cover"/>
+
+## Features
+### Secure Password Storage
+Easily store your passwords locally on your device's storage, ensuring that your sensitive information remains under your control and away from prying eyes.
+
+### Password Generation
+Struggling to come up with strong, unique passwords? PassVault can generate complex passwords tailored to your requirements, making it easier than ever to enhance your online security.
+
+### Categorization
+Organize your passwords effortlessly by categorizing them into one of three predefined categories: "Browser," "Mobile Apps," or "Payment." Keep your digital life tidy and well-structured.
+
+### Cross-Platform
+Built using the versatile Flutter framework, PassVault runs seamlessly on multiple platforms, including Android and iOS. Enjoy a consistent and user-friendly experience, no matter which device you use.
+
+## Why Choose PassVault?
+- Security: Your passwords are encrypted and stored locally, ensuring maximum security.
+- Convenience: Generate, store, and categorize passwords all in one app.
+- Cross-Platform: Use PassVault on both Android and iOS devices.
+- User-Friendly: An intuitive and easy-to-use interface for all your password management needs.
+
+## Screenshots
 
 <img src="https://firebasestorage.googleapis.com/v0/b/portfolio-6b91d.appspot.com/o/passvault-ss1.png?alt=media&token=430418f4-e6cf-4ab1-b241-2870ff2be28a" alt="Splash Screen" width="300"/>
 
